@@ -1,0 +1,98 @@
+name: Promote to latest
+
+on:
+  workflow_dispatch:
+
+jobs:
+  get_time:
+    runs-on: ubuntu-latest
+    outputs:
+      output1: ${{ steps.date.outputs.date }}
+    steps:
+      - name: Set current date as env variable
+        id: date
+        run: echo "date=$(date +"%Y%m%d_%H%M%S")" >> $GITHUB_OUTPUT
+
+  promote_to_latest:
+    needs: get_time
+    runs-on: ubuntu-latest
+    name: Promote from beta to latest 
+    
+    strategy:
+      fail-fast: false
+      matrix:
+        name: [
+          'aio-alpine',
+          'aio-apache',
+          'aio-borgbackup',
+          'aio-collabora',
+          'aio-domaincheck',
+          'all-in-one',
+          'aio-nextcloud',
+          'aio-notify-push',
+          'aio-postgresql',
+          'aio-redis',
+          'aio-talk',
+          'aio-watchtower',
+          'aio-clamav',
+          'aio-onlyoffice',
+          'aio-imaginary',
+          'aio-talk-recording',
+          'aio-fulltextsearch',
+          'aio-docker-socket-proxy',
+          'aio-whiteboard']
+
+    steps:
+    - name: Login to ghcr.io
+      uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+        
+    - name: Promote images from beta to latest on ghcr.io
+      run: |
+        set -x
+        AIO_NAME=${{ matrix.name }}
+        DATE="${{needs.get_time.outputs.output1}}"
+        if [ -z "$DATE" ]; then
+          exit 1
+        fi
+        set +x
+        
+        # multiarch
+        docker buildx imagetools create --tag ghcr.io/nextcloud-releases/$AIO_NAME\:latest ghcr.io/nextcloud-releases/$AIO_NAME\:beta
+        docker buildx imagetools create --tag ghcr.io/nextcloud-releases/$AIO_NAME\:"$DATE" ghcr.io/nextcloud-releases/$AIO_NAME\:beta
+        
+        # arm64
+        docker buildx imagetools create --tag ghcr.io/nextcloud-releases/$AIO_NAME\:latest-arm64 ghcr.io/nextcloud-releases/$AIO_NAME\:beta-arm64
+        
+        if [ "$AIO_NAME" == "aio-nextcloud" ]; then
+            set -x
+            docker pull ghcr.io/nextcloud-releases/$AIO_NAME\:beta
+            PHP_VERSION="$(docker inspect ghcr.io/nextcloud-releases/$AIO_NAME\:beta | grep PHP_VERSION | grep -oP '[0-8.]+' | sed 's|\.[0-9]\+$||')"
+            docker image remove --force ghcr.io/nextcloud-releases/$AIO_NAME\:beta
+            if [ -n "$PHP_VERSION" ]; then
+                # multiarch
+                docker buildx imagetools create --tag ghcr.io/nextcloud-releases/$AIO_NAME\:php"$PHP_VERSION"-latest ghcr.io/nextcloud-releases/$AIO_NAME\:beta
+                # arm64
+                docker buildx imagetools create --tag ghcr.io/nextcloud-releases/$AIO_NAME\:php"$PHP_VERSION"-latest-arm64 ghcr.io/nextcloud-releases/$AIO_NAME\:beta-arm64
+            fi
+            set +x
+        fi
+
+    - name: Login to DockerHub
+      if: matrix.name == 'all-in-one'
+      uses: docker/login-action@v2 
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Promote images from develop to beta (create multiarch) on docker hub
+      if: matrix.name == 'all-in-one'
+      run: |
+        # multiarch
+        docker buildx imagetools create --tag nextcloud/all-in-one\:latest nextcloud/all-in-one\:beta
+        
+        # arm64
+        docker buildx imagetools create --tag nextcloud/all-in-one\:latest-arm64 nextcloud/all-in-one\:beta-arm64
