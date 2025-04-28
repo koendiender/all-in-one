@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-amd64:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
@@ -53,7 +53,7 @@ jobs:
           tags: ghcr.io/koendiender/${{ matrix.container.name }}:develop
 
   build-arm64:
-    runs-on: ubuntu-24.04-arm
+    runs-on: self-hosted
     strategy:
       fail-fast: false
       matrix:
