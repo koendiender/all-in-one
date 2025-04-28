@@ -1,10 +1,6 @@
 name: Build docker images
 
 on:
-  workflow_run:
-    workflows: ["Repo Sync"]
-    types:
-      - completed
   workflow_dispatch:
 
 jobs:
