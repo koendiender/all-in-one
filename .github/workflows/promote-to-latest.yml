@@ -61,38 +61,22 @@ jobs:
         set +x
         
         # multiarch
-        docker buildx imagetools create --tag ghcr.io/nextcloud-releases/$AIO_NAME\:latest ghcr.io/nextcloud-releases/$AIO_NAME\:beta
-        docker buildx imagetools create --tag ghcr.io/nextcloud-releases/$AIO_NAME\:"$DATE" ghcr.io/nextcloud-releases/$AIO_NAME\:beta
+        docker buildx imagetools create --tag ghcr.io/koendiender/$AIO_NAME\:latest ghcr.io/koendiender/$AIO_NAME\:beta
+        docker buildx imagetools create --tag ghcr.io/koendiender/$AIO_NAME\:"$DATE" ghcr.io/koendiender/$AIO_NAME\:beta
         
         # arm64
-        docker buildx imagetools create --tag ghcr.io/nextcloud-releases/$AIO_NAME\:latest-arm64 ghcr.io/nextcloud-releases/$AIO_NAME\:beta-arm64
+        docker buildx imagetools create --tag ghcr.io/koendiender/$AIO_NAME\:latest-arm64 ghcr.io/koendiender/$AIO_NAME\:beta-arm64
         
         if [ "$AIO_NAME" == "aio-nextcloud" ]; then
             set -x
-            docker pull ghcr.io/nextcloud-releases/$AIO_NAME\:beta
-            PHP_VERSION="$(docker inspect ghcr.io/nextcloud-releases/$AIO_NAME\:beta | grep PHP_VERSION | grep -oP '[0-8.]+' | sed 's|\.[0-9]\+$||')"
-            docker image remove --force ghcr.io/nextcloud-releases/$AIO_NAME\:beta
+            docker pull ghcr.io/koendiender/$AIO_NAME\:beta
+            PHP_VERSION="$(docker inspect ghcr.io/koendiender/$AIO_NAME\:beta | grep PHP_VERSION | grep -oP '[0-8.]+' | sed 's|\.[0-9]\+$||')"
+            docker image remove --force ghcr.io/koendiender/$AIO_NAME\:beta
             if [ -n "$PHP_VERSION" ]; then
                 # multiarch
-                docker buildx imagetools create --tag ghcr.io/nextcloud-releases/$AIO_NAME\:php"$PHP_VERSION"-latest ghcr.io/nextcloud-releases/$AIO_NAME\:beta
+                docker buildx imagetools create --tag ghcr.io/koendiender/$AIO_NAME\:php"$PHP_VERSION"-latest ghcr.io/koendiender/$AIO_NAME\:beta
                 # arm64
-                docker buildx imagetools create --tag ghcr.io/nextcloud-releases/$AIO_NAME\:php"$PHP_VERSION"-latest-arm64 ghcr.io/nextcloud-releases/$AIO_NAME\:beta-arm64
+                docker buildx imagetools create --tag ghcr.io/koendiender/$AIO_NAME\:php"$PHP_VERSION"-latest-arm64 ghcr.io/koendiender/$AIO_NAME\:beta-arm64
             fi
             set +x
         fi
-
-    - name: Login to DockerHub
-      if: matrix.name == 'all-in-one'
-      uses: docker/login-action@v2 
-      with:
-        username: ${{ secrets.DOCKERHUB_USERNAME }}
-        password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-    - name: Promote images from develop to beta (create multiarch) on docker hub
-      if: matrix.name == 'all-in-one'
-      run: |
-        # multiarch
-        docker buildx imagetools create --tag nextcloud/all-in-one\:latest nextcloud/all-in-one\:beta
-        
-        # arm64
-        docker buildx imagetools create --tag nextcloud/all-in-one\:latest-arm64 nextcloud/all-in-one\:beta-arm64
