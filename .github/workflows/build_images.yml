@@ -2,6 +2,9 @@ name: Build docker images
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+    - main
 
 jobs:
   build-amd64:
