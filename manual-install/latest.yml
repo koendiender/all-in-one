@@ -19,7 +19,7 @@ services:
       nextcloud-aio-whiteboard:
         condition: service_started
         required: false
-    image: ghcr.io/nextcloud-releases/aio-apache:latest
+    image: ghcr.io/koendiender/aio-apache:latest
     user: "33"
     init: true
     healthcheck:
@@ -60,7 +60,7 @@ services:
       - NET_RAW
 
   nextcloud-aio-database:
-    image: ghcr.io/nextcloud-releases/aio-postgresql:latest
+    image: ghcr.io/koendiender/aio-postgresql:latest
     user: "999"
     init: true
     healthcheck:
@@ -110,7 +110,7 @@ services:
       nextcloud-aio-imaginary:
         condition: service_started
         required: false
-    image: ghcr.io/nextcloud-releases/aio-nextcloud:latest
+    image: ghcr.io/koendiender/aio-nextcloud:latest
     init: true
     healthcheck:
       start_period: 0s
@@ -185,7 +185,7 @@ services:
       - NET_RAW
 
   nextcloud-aio-notify-push:
-    image: ghcr.io/nextcloud-releases/aio-notify-push:latest
+    image: ghcr.io/koendiender/aio-notify-push:latest
     user: "33"
     init: true
     healthcheck:
@@ -216,7 +216,7 @@ services:
       - NET_RAW
 
   nextcloud-aio-redis:
-    image: ghcr.io/nextcloud-releases/aio-redis:latest
+    image: ghcr.io/koendiender/aio-redis:latest
     user: "999"
     init: true
     healthcheck:
@@ -240,7 +240,7 @@ services:
 
   nextcloud-aio-collabora:
     command: ${ADDITIONAL_COLLABORA_OPTIONS}
-    image: ghcr.io/nextcloud-releases/aio-collabora:latest
+    image: ghcr.io/koendiender/aio-collabora:latest
     init: true
     healthcheck:
       start_period: 60s
@@ -268,7 +268,7 @@ services:
       - NET_RAW
 
   nextcloud-aio-talk:
-    image: ghcr.io/nextcloud-releases/aio-talk:latest
+    image: ghcr.io/koendiender/aio-talk:latest
     user: "1000"
     init: true
     healthcheck:
@@ -306,7 +306,7 @@ services:
       - NET_RAW
 
   nextcloud-aio-talk-recording:
-    image: ghcr.io/nextcloud-releases/aio-talk-recording:latest
+    image: ghcr.io/koendiender/aio-talk-recording:latest
     user: "122"
     init: true
     healthcheck:
@@ -336,7 +336,7 @@ services:
       - NET_RAW
 
   nextcloud-aio-clamav:
-    image: ghcr.io/nextcloud-releases/aio-clamav:latest
+    image: ghcr.io/koendiender/aio-clamav:latest
     user: "100"
     init: false
     healthcheck:
@@ -367,7 +367,7 @@ services:
       - NET_RAW
 
   nextcloud-aio-onlyoffice:
-    image: ghcr.io/nextcloud-releases/aio-onlyoffice:latest
+    image: ghcr.io/koendiender/aio-onlyoffice:latest
     init: true
     healthcheck:
       start_period: 60s
@@ -392,7 +392,7 @@ services:
       - NET_RAW
 
   nextcloud-aio-imaginary:
-    image: ghcr.io/nextcloud-releases/aio-imaginary:latest
+    image: ghcr.io/koendiender/aio-imaginary:latest
     user: "65534"
     init: true
     healthcheck:
@@ -419,7 +419,7 @@ services:
       - /tmp
 
   nextcloud-aio-fulltextsearch:
-    image: ghcr.io/nextcloud-releases/aio-fulltextsearch:latest
+    image: ghcr.io/koendiender/aio-fulltextsearch:latest
     init: false
     healthcheck:
       start_period: 60s
@@ -450,7 +450,7 @@ services:
       - NET_RAW
 
   nextcloud-aio-whiteboard:
-    image: ghcr.io/nextcloud-releases/aio-whiteboard:latest
+    image: ghcr.io/koendiender/aio-whiteboard:latest
     user: "65534"
     init: true
     healthcheck:

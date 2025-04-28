@@ -34,7 +34,7 @@ docker run \
 --name nextcloud-aio-mastercontainer \
 --volume nextcloud_aio_mastercontainer:/mnt/docker-aio-config \
 --volume /var/run/docker.sock:/var/run/docker.sock \
-ghcr.io/nextcloud-releases/all-in-one:latest
+ghcr.io/koendiender/all-in-one:latest
 ```
 
 ### 4. Start your server
