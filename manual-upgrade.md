@@ -41,7 +41,7 @@ The only way to fix this on your side is upgrading regularly (e.g. by enabling d
 
 
  - e.g. `ghcr.io/koendiender/aio-nextcloud:php8.0-latest` or `ghcr.io/koendiender/aio-nextcloud:php8.0-latest-arm64`
- - However, if you are unsure check the ghcr.io (https://github.com/nextcloud-releases/all-in-one/pkgs/container/aio-nextcloud/versions?filters%5Bversion_type%5D=tagged) and docker hub: https://hub.docker.com/r/nextcloud/aio-nextcloud/tags?name=php
+ - However, if you are unsure check the ghcr.io (https://github.com/koendiender/all-in-one/pkgs/container/aio-nextcloud/versions?filters%5Bversion_type%5D=tagged) and docker hub: https://hub.docker.com/r/nextcloud/aio-nextcloud/tags?name=php
  - Using nano and the arrow keys to navigate:
   - `sudo nano /tmp/nextcloud-aio-nextcloud` making changes as above, then `[Ctrl]+[o]` -> `[Enter]` and `[Ctrl]+[x]` to save and exit.
 6. Next, stop and remove the current container: 
@@ -95,7 +95,7 @@ Make **note** of the version which is compatible, rounding down to 1 digit after
 
 ##### 5. Find the correct container version
 In general it should be ```ghcr.io/koendiender/aio-nextcloud:php8.x-latest-arm64``` or `ghcr.io/koendiender/aio-nextcloud:php8.x-latest` replacing `x` with the version you require.
-However, if you are unsure check the ghcr.io (https://github.com/nextcloud-releases/all-in-one/pkgs/container/aio-nextcloud/versions?filters%5Bversion_type%5D=tagged) and docker hub: https://hub.docker.com/r/nextcloud/aio-nextcloud/tags?name=php
+However, if you are unsure check the ghcr.io (https://github.com/koendiender/all-in-one/pkgs/container/aio-nextcloud/versions?filters%5Bversion_type%5D=tagged) and docker hub: https://hub.docker.com/r/nextcloud/aio-nextcloud/tags?name=php
 
 ##### 6. Replace the container
 - Navigate to the ```nextcloud-aio-nextcloud``` container within portainer
